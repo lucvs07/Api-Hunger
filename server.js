@@ -1,7 +1,9 @@
 
 import app from "./src/app.js";
+import dotenv from "dotenv";
+dotenv.config();
 
-const PORT = 3000; // Porta que o servidor irá escutar
+const PORT = process.env.PORT; // Porta que o servidor irá escutar
 
 
 // Chamar o servidor para escutar a porta 3000
