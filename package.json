@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "Api for Hunger Games`s Saga",
   "dependencies": {
+    "express": "^4.21.1",
     "nodemon": "^3.1.7"
   }
 }
