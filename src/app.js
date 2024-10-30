@@ -2,8 +2,7 @@
 import express from 'express';
 // Importar a função dbConnect -> Conectar MongoDB
 import dbConnect from './config/dbConnect.js';
-// Importar o model Character
-import Character from './models/Character.js';
+import routes from './routes/index.js';
 
 const connection = await dbConnect();
 
@@ -17,29 +16,8 @@ connection.once("open", () => {
 
 // Criar uma instância do express
 const app = express();
-// Middleware para o express entender JSON
-app.use(express.json());
+routes(app);
 
-// req -> requisição (request)
-// res -> resposta (response)
-
-// Rotas GET
-// Rota raiz
-app.get("/", (req, res) => {
-    res.status(200).send("Bem vindo a API Hunger Games");
-});
-// Rota para listar todos os personagens
-app.get("/personagens", async (req, res) => {
-    try {
-        const filter = {};
-        // Retornar a lista de personagens em formato JSON
-        const personagens = await Character.find(filter);
-        res.status(200).send(personagens);
-    } catch (error) {
-        res.status(500).send({message: error.message});
-    }
-    
-});
 // Rota para listar um personagem específico
 app.get("/personagens/:id", (req, res) => {
     const personagem = getPersonagemById(parseInt(req.params.id));
