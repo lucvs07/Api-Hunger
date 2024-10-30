@@ -55,4 +55,12 @@ app.put("/personagens/:id", (req, res) => {
     res.status(200).json(personagens);
 })
 
+// Rotas DELETE
+app.delete("/personagens/:id", (req, res) => {
+    const personagem = getPersonagemById(parseInt(req.params.id));
+    const index = personagens.indexOf(personagem);
+    personagens.splice(index, 1);
+    res.status(200).send(`Personagem: ${personagem.nome} deletado com sucesso`);
+})
+
 export default app;
