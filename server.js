@@ -2,7 +2,6 @@
 import app from "./src/app.js";
 import dotenv from "dotenv";
 import axios from "axios";
-import { set } from "mongoose";
 
 dotenv.config();
 
