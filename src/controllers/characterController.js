@@ -1,4 +1,5 @@
 import Character from "../models/Character.js"; // Importa o model Character
+import { getDailyCharacter, getLastCharacter } from "./getDailyCharacter.js";
 
 class CharacterController {
     // Método Get para listar todos os personagens
@@ -33,6 +34,30 @@ class CharacterController {
 
         } catch (error) {
             res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem`});
+        }
+    }
+    static async getDailyCharacter(req, res){
+        try {
+            const dailyCharacter = await getDailyCharacter();
+            if (dailyCharacter){
+                res.status(200).json(dailyCharacter);
+            } else {
+                res.status(404).json({message: "Nenhum personagem encontrado"});
+            }
+        } catch (error) {
+            res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem do Dia`});
+        }
+    };
+    static async getLastCharacter(req, res){
+        try {
+            const lastCharacter = await getLastCharacter();
+            if (lastCharacter){
+                res.status(200).json(lastCharacter);
+            } else {
+                res.status(404).json({message: "Nenhum personagem encontrado"});
+            }
+        } catch (error){
+            res.status(500).json({message: `${error.message} - Falha ao Buscar Último Personagem`});
         }
     }
     // Método Post para criar um novo personagem

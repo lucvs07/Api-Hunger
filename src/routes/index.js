@@ -1,5 +1,7 @@
 import express from 'express';
 import characters from './charactersRoutes.js';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
 const routes = (app) => {
     app.route("/").get((req, res) => {
@@ -7,7 +9,8 @@ const routes = (app) => {
     })
 
     app.use(express.json(), characters);
-
+    app.use(cors())
+    app.use(bodyParser.json());
 };
 
 export default routes;
