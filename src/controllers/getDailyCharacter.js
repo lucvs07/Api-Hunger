@@ -29,6 +29,9 @@ const getDailyCharacter = async (req, res) => {
 
         // Buscar o personagem do dia
         const dailyCharacter = await Character.findOne({lastSelectedDate: {$gte: timeChange}});
+        if (dailyCharacter) {
+            return dailyCharacter
+        }
 
         // Contar quantos personagens não estão selecionados
         const countCharactersNotSelected = await Character.countDocuments({isSelected: false});
