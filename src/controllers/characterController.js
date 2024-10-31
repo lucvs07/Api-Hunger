@@ -25,6 +25,16 @@ class CharacterController {
 
         }
     }
+    static async getCharacterByDistrict(req, res){
+        const districtQuery = req.query.district;
+        try {
+            const characterByDistrict = await Character.find({house: districtQuery});
+            res.status(200).json(characterByDistrict);
+
+        } catch (error) {
+            res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem`});
+        }
+    }
     // Método Post para criar um novo personagem
     static async postCharacter(req, res){
         try{
