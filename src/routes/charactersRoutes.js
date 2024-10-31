@@ -3,7 +3,16 @@ import CharacterController from '../controllers/characterController.js';
 
 const routes = express.Router();
 
-// Rota para listar todos os personagens
+// Rotas GET
 routes.get("/characters", CharacterController.getCharacters);
+routes.get("/characters/:id", CharacterController.getCharacterById);
 
+// Rotas POST
+routes.post("/characters", CharacterController.postCharacter);
+
+// Rotas PUT
+routes.put("/characters/:id", CharacterController.putCharacterById);
+
+// Rotas DELETE
+routes.delete("/characters/:id", CharacterController.deleteCharacterById);
 export default routes;
