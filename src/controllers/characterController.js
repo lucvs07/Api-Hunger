@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Character from "../models/Character.js"; // Importa o model Character
 import { getDailyCharacter, getLastCharacter } from "./getDailyCharacter.js";
 
@@ -19,11 +20,18 @@ class CharacterController {
     try {
       const id = req.params.id;
       const personagem = await Character.findById(id);
-      res.status(200).json(personagem);
 
+      if (personagem !== null) {
+        res.status(200).json(personagem);
+      } else {
+        res.status(404).json({message: "Personagem não encontrado"});
+      }
     } catch (error) {
-      res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem`});
-
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(400).json({message: "ID inválido"});
+      } else {
+        res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem`});
+      }
     }
   }
   static async getCharacterByDistrict(req, res){
