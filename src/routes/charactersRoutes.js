@@ -1,5 +1,5 @@
-import express from 'express';
-import CharacterController from '../controllers/characterController.js';
+import express from "express";
+import CharacterController from "../controllers/characterController.js";
 
 const routes = express.Router();
 
