@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+
 import Character from "../models/Character.js"; // Importa o model Character
 import { getDailyCharacter, getLastCharacter } from "./getDailyCharacter.js";
 
 class CharacterController {
   // Método Get para listar todos os personagens
-  static async getCharacters(req, res){
+  static async getCharacters(req, res, next){
     try {
       const filter = {};
       // Retornar a lista de personagens em formato JSON
@@ -12,11 +12,11 @@ class CharacterController {
       console.log(personagens);
       res.status(200).json(personagens);
     } catch (error) {
-      res.status(500).json({message: `${error.message} - Falha ao Buscar os Personagens`});
+      next(error);
     }
   }
 
-  static async getCharacterById(req, res){
+  static async getCharacterById(req, res, next){
     try {
       const id = req.params.id;
       const personagem = await Character.findById(id);
@@ -27,24 +27,20 @@ class CharacterController {
         res.status(404).json({message: "Personagem não encontrado"});
       }
     } catch (error) {
-      if (error instanceof mongoose.Error.CastError) {
-        res.status(400).json({message: "ID inválido"});
-      } else {
-        res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem`});
-      }
+      next(error);
     }
   }
-  static async getCharacterByDistrict(req, res){
+  static async getCharacterByDistrict(req, res, next){
     const districtQuery = req.query.district;
     try {
       const characterByDistrict = await Character.find({house: districtQuery});
       res.status(200).json(characterByDistrict);
 
     } catch (error) {
-      res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem`});
+      next(error);
     }
   }
-  static async getDailyCharacter(req, res){
+  static async getDailyCharacter(req, res, next){
     try {
       const dailyCharacter = await getDailyCharacter();
       if (dailyCharacter){
@@ -53,10 +49,10 @@ class CharacterController {
         res.status(404).json({message: "Nenhum personagem encontrado"});
       }
     } catch (error) {
-      res.status(500).json({message: `${error.message} - Falha ao Buscar Personagem do Dia`});
+      next(error);  
     }
   };
-  static async getLastCharacter(req, res){
+  static async getLastCharacter(req, res, next){
     try {
       const lastCharacter = await getLastCharacter();
       if (lastCharacter){
@@ -65,21 +61,21 @@ class CharacterController {
         res.status(404).json({message: "Nenhum personagem encontrado"});
       }
     } catch (error){
-      res.status(500).json({message: `${error.message} - Falha ao Buscar Último Personagem`});
+      next(error);
     }
   }
   // Método Post para criar um novo personagem
-  static async postCharacter(req, res){
+  static async postCharacter(req, res, next){
     try{
       const newCharacter = await Character.create(req.body);
       res.status(201).json({message: "Criado com sucesso", Personagem: newCharacter});
     } catch (error){
-      res.status(500).json({message: `${error.message} - Falha ao Cadastrar Personagem`});
+      next(error);
     }
   }
 
   // Método Put para atualizar um personagem
-  static async putCharacterById(req, res){
+  static async putCharacterById(req, res, next){
     try {
       const id = req.params.id;
       const updateCharacter = await Character.findByIdAndUpdate(id,
@@ -103,12 +99,11 @@ class CharacterController {
       res.status(200).json({message: "Personagem Atualizado com Sucesso", Personagem: updateCharacter});
 
     } catch (error) {
-      res.status(500).json({message: `${error.message} - Falha ao Atualizar Personagem`});
-
+      next(error);
     }
   }
   // Método Delete para deletar um personagem
-  static async deleteCharacterById(req, res){
+  static async deleteCharacterById(req, res, next){
     try {
       const id = req.params.id;
       const deleteCharacter = await Character.findByIdAndDelete(id);
@@ -118,8 +113,7 @@ class CharacterController {
       res.status(200).json({message: "Personagem Deletado com Sucesso"});
 
     } catch (error) {
-      res.status(500).json({message: `${error.message} - Falha ao Deletar Personagem`});
-
+      next(error);
     }
   }
 
