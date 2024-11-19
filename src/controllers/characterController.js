@@ -1,4 +1,5 @@
 
+import NaoEncontrado from "../erros/NaoEncontrado.js";
 import Character from "../models/Character.js"; // Importa o model Character
 import { getDailyCharacter, getLastCharacter } from "./getDailyCharacter.js";
 
@@ -24,7 +25,7 @@ class CharacterController {
       if (personagem !== null) {
         res.status(200).json(personagem);
       } else {
-        res.status(404).json({message: "Personagem não encontrado"});
+        next(new NaoEncontrado("Personagem não encontrado"));
       }
     } catch (error) {
       next(error);
@@ -46,7 +47,7 @@ class CharacterController {
       if (dailyCharacter){
         res.status(200).json(dailyCharacter);
       } else {
-        res.status(404).json({message: "Nenhum personagem encontrado"});
+        next(new NaoEncontrado("Personagem não encontrado"));
       }
     } catch (error) {
       next(error);  
@@ -58,7 +59,7 @@ class CharacterController {
       if (lastCharacter){
         res.status(200).json(lastCharacter);
       } else {
-        res.status(404).json({message: "Nenhum personagem encontrado"});
+        next(new NaoEncontrado("Personagem não encontrado"));
       }
     } catch (error){
       next(error);
@@ -94,7 +95,7 @@ class CharacterController {
         }
       );
       if (!updateCharacter) {
-        res.status(404).json({message: "Personagem não encontrado"});
+        next(new NaoEncontrado("Personagem não encontrado"));
       }
       res.status(200).json({message: "Personagem Atualizado com Sucesso", Personagem: updateCharacter});
 
@@ -108,7 +109,7 @@ class CharacterController {
       const id = req.params.id;
       const deleteCharacter = await Character.findByIdAndDelete(id);
       if (!deleteCharacter) {
-        res.status(404).json({message: "Personagem não encontrado"});
+        next(new NaoEncontrado("Personagem não encontrado"));
       }
       res.status(200).json({message: "Personagem Deletado com Sucesso"});
 
