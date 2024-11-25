@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import mongoose from "mongoose";
 import requireMessage from "../middlewares/requireMessage.js";
 // Schema -> Estrutura do Character
@@ -17,6 +18,10 @@ const characterSchema = new mongoose.Schema({ // criação de id único,
   gender: { 
     type: String, 
     required: [true, requireMessage("Gender")] },
+    enum: {
+      values: ["Female", "Male"],
+      message: ["Gender must be Female or Male"]
+  },
   appearance: { 
     type: String, 
     required: [true, requireMessage("Appearance")] },

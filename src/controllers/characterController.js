@@ -1,6 +1,6 @@
 
 import NaoEncontrado from "../erros/NaoEncontrado.js";
-import Character from "../models/Character.js"; // Importa o model Character
+import { Character } from "../models/index.js"; // Importa o model Character
 import { getDailyCharacter, getLastCharacter } from "./getDailyCharacter.js";
 
 class CharacterController {
