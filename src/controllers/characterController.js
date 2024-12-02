@@ -34,14 +34,7 @@ class CharacterController {
 
   static async getCharacterByFilter(req, res, next){
     try {
-      const {name, occupation, weapon, house, gender, appearance} = req.query;
-      const filter = {};
-      if (name) filter.name = { $regex: name, $options: "i" };
-      if (occupation) filter.occupation = { $regex: occupation, $options: "i" };
-      if (weapon) filter.weapon = { $regex: weapon, $options: "i" };
-      if (house) filter.house = {$regex: house, $options: "i" };
-      if (gender) filter.gender = {$regex: gender, $options: "i" };
-      if (appearance) filter.appearance = {$regex: appearance, $options: "i" };
+      const filter = await processarBusca(req.query);
 
       const characterByFilter = await Character.find(filter);
       res.status(200).json(characterByFilter);
@@ -128,5 +121,17 @@ class CharacterController {
   }
 
 };
+
+function processarBusca(parametros){
+  const {name, occupation, weapon, house, gender, appearance} = parametros;
+  let filter = {};
+  if (name) filter.name = { $regex: name, $options: "i" };
+  if (occupation) filter.occupation = { $regex: occupation, $options: "i" };
+  if (weapon) filter.weapon = { $regex: weapon, $options: "i" };
+  if (house) filter.house = {$regex: house, $options: "i" };
+  if (gender) filter.gender = {$regex: gender, $options: "i" };
+  if (appearance) filter.appearance = {$regex: appearance, $options: "i" };
+  return filter;
+}
 
 export default CharacterController; // Exporta o controller de personagens
