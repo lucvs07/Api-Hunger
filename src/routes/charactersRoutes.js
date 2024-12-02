@@ -7,7 +7,7 @@ const routes = express.Router();
 routes.get("/characters/daily", CharacterController.getDailyCharacter);
 routes.get("/characters/last", CharacterController.getLastCharacter);
 routes.get("/characters", CharacterController.getCharacters);
-routes.get("/characters/search", CharacterController.getCharacterByDistrict);
+routes.get("/characters/search", CharacterController.getCharacterByFilter);
 routes.get("/characters/:id", CharacterController.getCharacterById);
 
 // Rotas POST

@@ -31,16 +31,25 @@ class CharacterController {
       next(error);
     }
   }
-  static async getCharacterByDistrict(req, res, next){
-    const districtQuery = req.query.district;
-    try {
-      const characterByDistrict = await Character.find({house: districtQuery});
-      res.status(200).json(characterByDistrict);
 
-    } catch (error) {
+  static async getCharacterByFilter(req, res, next){
+    try {
+      const {name, occupation, weapon, house, gender, appearance} = req.query;
+      const filter = {};
+      if (name) filter.name = name;
+      if (occupation) filter.occupation = occupation;
+      if (weapon) filter.weapon = weapon;
+      if (house) filter.house = house;
+      if (gender) filter.gender = gender;
+      if (appearance) filter.appearance = appearance;
+
+      const characterByFilter = await Character.find(filter);
+      res.status(200).json(characterByFilter);
+    } catch (error) { 
       next(error);
     }
   }
+
   static async getDailyCharacter(req, res, next){
     try {
       const dailyCharacter = await getDailyCharacter();
