@@ -36,12 +36,12 @@ class CharacterController {
     try {
       const {name, occupation, weapon, house, gender, appearance} = req.query;
       const filter = {};
-      if (name) filter.name = name;
-      if (occupation) filter.occupation = occupation;
-      if (weapon) filter.weapon = weapon;
-      if (house) filter.house = house;
-      if (gender) filter.gender = gender;
-      if (appearance) filter.appearance = appearance;
+      if (name) filter.name = { $regex: name, $options: "i" };
+      if (occupation) filter.occupation = { $regex: occupation, $options: "i" };
+      if (weapon) filter.weapon = { $regex: weapon, $options: "i" };
+      if (house) filter.house = {$regex: house, $options: "i" };
+      if (gender) filter.gender = {$regex: gender, $options: "i" };
+      if (appearance) filter.appearance = {$regex: appearance, $options: "i" };
 
       const characterByFilter = await Character.find(filter);
       res.status(200).json(characterByFilter);
