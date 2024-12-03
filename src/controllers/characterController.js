@@ -8,14 +8,17 @@ class CharacterController {
   // Método Get para listar todos os personagens
   static async getCharacters(req, res, next){
     try {
-      let {limite = 5, pagina = 1} = req.query;
+      let {limite = 5, pagina = 1, ordenar = "house:1"} = req.query;
+      let [campo, ordem] = ordenar.split(":");
       limite = parseInt(limite);
       pagina = parseInt(pagina);
+      ordem = parseInt(ordem);
 
-      if (limite > 0 && limite > 0){
+      if (limite > 0 && pagina > 0){
         const filter = {};
         // Retornar a lista de personagens em formato JSON
         const personagens = await Character.find(filter)
+          .sort({[campo]: ordem})
           .skip((pagina - 1) * limite)
           .limit(limite)
           .exec();
