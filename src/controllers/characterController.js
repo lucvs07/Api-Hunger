@@ -1,5 +1,6 @@
 
 import NaoEncontrado from "../erros/NaoEncontrado.js";
+import RequisicaoIncorreta from "../erros/RequisicaoIncorreta.js";
 import { Character } from "../models/index.js"; // Importa o model Character
 import { getDailyCharacter, getLastCharacter } from "./getDailyCharacter.js";
 
@@ -7,11 +8,23 @@ class CharacterController {
   // Método Get para listar todos os personagens
   static async getCharacters(req, res, next){
     try {
-      const filter = {};
-      // Retornar a lista de personagens em formato JSON
-      const personagens = await Character.find(filter);
-      console.log(personagens);
-      res.status(200).json(personagens);
+      let {limite = 5, pagina = 1} = req.query;
+      limite = parseInt(limite);
+      pagina = parseInt(pagina);
+
+      if (limite > 0 && limite > 0){
+        const filter = {};
+        // Retornar a lista de personagens em formato JSON
+        const personagens = await Character.find(filter)
+          .skip((pagina - 1) * limite)
+          .limit(limite)
+          .exec();
+        console.log(personagens);
+        res.status(200).json(personagens);
+      } else {
+        next(new RequisicaoIncorreta());
+      }
+      
     } catch (error) {
       next(error);
     }
