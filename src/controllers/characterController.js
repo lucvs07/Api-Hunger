@@ -1,6 +1,5 @@
 
 import NaoEncontrado from "../erros/NaoEncontrado.js";
-import RequisicaoIncorreta from "../erros/RequisicaoIncorreta.js";
 import { Character } from "../models/index.js"; // Importa o model Character
 import { getDailyCharacter, getLastCharacter } from "./getDailyCharacter.js";
 
@@ -8,26 +7,9 @@ class CharacterController {
   // Método Get para listar todos os personagens
   static async getCharacters(req, res, next){
     try {
-      let {limite = 5, pagina = 1, ordenar = "house:1"} = req.query;
-      let [campo, ordem] = ordenar.split(":");
-      limite = parseInt(limite);
-      pagina = parseInt(pagina);
-      ordem = parseInt(ordem);
-
-      if (limite > 0 && pagina > 0){
-        const filter = {};
-        // Retornar a lista de personagens em formato JSON
-        const personagens = await Character.find(filter)
-          .sort({[campo]: ordem})
-          .skip((pagina - 1) * limite)
-          .limit(limite)
-          .exec();
-        console.log(personagens);
-        res.status(200).json(personagens);
-      } else {
-        next(new RequisicaoIncorreta());
-      }
-      
+      const buscaPersonagens = Character.find();
+      req.resultado = buscaPersonagens;
+      next();
     } catch (error) {
       next(error);
     }
@@ -52,8 +34,9 @@ class CharacterController {
     try {
       const filter = await processarBusca(req.query);
 
-      const characterByFilter = await Character.find(filter);
-      res.status(200).json(characterByFilter);
+      const characterByFilter = Character.find(filter);
+      req.resultado = characterByFilter;
+      next();
     } catch (error) { 
       next(error);
     }
